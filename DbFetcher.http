@@ -1,0 +1,6 @@
+@DbFetcher_HostAddress = http://localhost:5129
+
+GET {{DbFetcher_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
