@@ -74,3 +74,4 @@ C:\Users\ABHINAV\Desktop\.NET\DbFetcher\obj\Debug\net10.0\refint\DbFetcher.dll
 C:\Users\ABHINAV\Desktop\.NET\DbFetcher\obj\Debug\net10.0\DbFetcher.pdb
 C:\Users\ABHINAV\Desktop\.NET\DbFetcher\obj\Debug\net10.0\DbFetcher.genruntimeconfig.cache
 C:\Users\ABHINAV\Desktop\.NET\DbFetcher\obj\Debug\net10.0\ref\DbFetcher.dll
+C:\Users\ABHINAV\Desktop\.NET\DbFetcher\obj\Debug\net10.0\DbFetcher.sourcelink.json
