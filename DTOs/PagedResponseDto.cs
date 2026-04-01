@@ -9,12 +9,14 @@ public class PagedResponseDto<T>
 
 public class MetadataDto
 {
-    public int? NextCursor { get; set; }
+    /// <summary>
+    /// Next cursor for cursor-based pagination or index indicator for index-based pagination
+    /// </summary>
+    public string? NextCursor { get; set; }
 
     public bool HasMore { get; set; }
 
     public int PageSize { get; set; }
-
 
     public long? TotalCount { get; set; }
 }

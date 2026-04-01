@@ -1,20 +1,19 @@
 using DbFetcher.Data;
 using DbFetcher.Services;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Services.AddControllers();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Read connection string from environment variable, fall back to configuration
+var mongoConnectionString = Environment.GetEnvironmentVariable("MONGODB_CONNECTION_STRING") 
+    ?? builder.Configuration.GetConnectionString("Default")
+    ?? throw new InvalidOperationException("MongoDB connection string is not configured");
 
-builder.Services.AddDbContext<InvoiceDbContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString("Default")));
-
+// Register MongoDB context
+builder.Services.AddSingleton<InvoiceDbContext>(new InvoiceDbContext(mongoConnectionString));
 
 builder.Services.AddScoped<IInvoiceService, InvoiceService>();
 builder.Services.AddCors(options =>
@@ -30,15 +29,12 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI(options =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "DbFetcher API v1");
-        options.RoutePrefix = "swagger";
-    });
-}
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "DbFetcher API v1");
+    options.RoutePrefix = "swagger";
+});
 app.UseCors("LocalNetwork");
 app.UseAuthorization();
 app.MapControllers();

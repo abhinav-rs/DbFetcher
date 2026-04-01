@@ -75,3 +75,10 @@ C:\Users\ABHINAV\Desktop\.NET\DbFetcher\obj\Debug\net10.0\DbFetcher.pdb
 C:\Users\ABHINAV\Desktop\.NET\DbFetcher\obj\Debug\net10.0\DbFetcher.genruntimeconfig.cache
 C:\Users\ABHINAV\Desktop\.NET\DbFetcher\obj\Debug\net10.0\ref\DbFetcher.dll
 C:\Users\ABHINAV\Desktop\.NET\DbFetcher\obj\Debug\net10.0\DbFetcher.sourcelink.json
+C:\Users\ABHINAV\Desktop\.NET\DbFetcher\bin\Debug\net10.0\appsettings.Production.json
+C:\Users\ABHINAV\Desktop\.NET\DbFetcher\bin\Debug\net10.0\DnsClient.dll
+C:\Users\ABHINAV\Desktop\.NET\DbFetcher\bin\Debug\net10.0\MongoDB.Bson.dll
+C:\Users\ABHINAV\Desktop\.NET\DbFetcher\bin\Debug\net10.0\MongoDB.Driver.dll
+C:\Users\ABHINAV\Desktop\.NET\DbFetcher\bin\Debug\net10.0\SharpCompress.dll
+C:\Users\ABHINAV\Desktop\.NET\DbFetcher\bin\Debug\net10.0\Snappier.dll
+C:\Users\ABHINAV\Desktop\.NET\DbFetcher\bin\Debug\net10.0\ZstdSharp.dll

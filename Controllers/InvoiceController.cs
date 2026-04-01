@@ -23,8 +23,7 @@ public class InvoiceController : ControllerBase
             return BadRequest(new { message = "PageSize must be greater than 0." });
         }
 
-        var (data, hasMore, nextCursor, totalCount) = await _invoiceService
-            .GetPagedAsync(request.Cursor, request.PageSize);
+        var (data, hasMore, nextCursor, totalCount) = await _invoiceService.GetPagedAsync(request);
 
         var response = new PagedResponseDto<InvoiceDto>
         {

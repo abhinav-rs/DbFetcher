@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DbFetcher")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+db3d909065e50875b6d791984a32c52fb0137880")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+39b006c25a64d6c0389cc51a97a4242bd0ef1861")]
 [assembly: System.Reflection.AssemblyProductAttribute("DbFetcher")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DbFetcher")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

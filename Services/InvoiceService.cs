@@ -1,7 +1,8 @@
 using DbFetcher.Data;
 using DbFetcher.DTOs;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
+using DbFetcher.Models;
+using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace DbFetcher.Services;
 
@@ -14,27 +15,39 @@ public class InvoiceService : IInvoiceService
         _context = context;
     }
 
-    public async Task<(List<InvoiceDto> Data, bool HasMore, int? NextCursor, long? TotalCount)>
-        GetPagedAsync(int? cursor, int pageSize)
+    /// <summary>
+    /// Get paged invoices using cursor-based pagination.
+    /// Omit Cursor to start from the beginning; supply NextCursor from the
+    /// previous response to fetch the next page.
+    /// </summary>
+    public async Task<(List<InvoiceDto> Data, bool HasMore, string? NextCursor, long? TotalCount)>
+        GetPagedAsync(PagedRequestDto request)
     {
-        pageSize = Math.Clamp(pageSize, 1, 1000);
+        request.PageSize = Math.Clamp(request.PageSize < 1 ? 50 : request.PageSize, 1, 1000);
 
-        var query = _context.Invoices
-            .AsNoTracking()
-            .OrderBy(i => i.Id);
+        var collection    = _context.Invoices;
+        var filterBuilder = Builders<Invoice>.Filter;
+        FilterDefinition<Invoice> filter = filterBuilder.Empty;
 
-
-        if (cursor.HasValue)
+        // Apply cursor filter if a cursor was provided
+        if (!string.IsNullOrEmpty(request.Cursor))
         {
-            query = (IOrderedQueryable<Models.Invoice>)query
-                .Where(i => i.Id > cursor.Value);
+            if (ObjectId.TryParse(request.Cursor, out var cursorObjectId))
+            {
+                filter = filterBuilder.Gt(i => i.Id, cursorObjectId);
+            }
+            // If the cursor string is not a valid ObjectId ignore it silently
+            // and return from the beginning (safe fallback)
         }
 
-        var rawResults = await query
-            .Take(pageSize + 1)
-            .Select(i => new InvoiceDto
+        // Fetch pageSize + 1 so we can determine whether there is a next page
+        var rawResults = await collection
+            .Find(filter)
+            .Sort(Builders<Invoice>.Sort.Ascending(i => i.Id))
+            .Limit(request.PageSize + 1)
+            .Project(i => new InvoiceDto
             {
-                Id                  = i.Id,
+                Id                  = i.Id.ToString(),
                 InvoiceNumber       = i.InvoiceNumber,
                 DistributorName     = i.DistributorName,
                 LocationId          = i.LocationId,
@@ -62,42 +75,19 @@ public class InvoiceService : IInvoiceService
             })
             .ToListAsync();
 
-        var hasMore    = rawResults.Count > pageSize;
-        var data       = hasMore
-            ? rawResults.Take(pageSize).ToList()  
-            : rawResults;
+        var hasMore    = rawResults.Count > request.PageSize;
+        var data       = hasMore ? rawResults.Take(request.PageSize).ToList() : rawResults;
+        var nextCursor = hasMore ? data.Last().Id : null;
 
-        var nextCursor = hasMore
-            ? data.Last().Id
-            : null as int?;
-
-        long? totalCount = null;
-        if (!cursor.HasValue)
-        {
-            totalCount = await GetTotalCountAsync();
-        }
+        // Single count call — only done once per request
+        long? totalCount = await GetTotalCountAsync();
 
         return (data, hasMore, nextCursor, totalCount);
     }
 
-    private async Task<long> GetTotalCountAsync()
+    public async Task<long> GetTotalCountAsync()
     {
-        var connection = _context.Database.GetDbConnection();
-
-        await using var cmd = connection.CreateCommand();
-        cmd.CommandText = @"
-            SELECT SUM(rows)
-            FROM sys.partitions
-            WHERE object_id = OBJECT_ID('Invoices')
-            AND index_id IN (0, 1)";
-
-
-        await connection.OpenAsync();
-
-        var result = await cmd.ExecuteScalarAsync();
-
-        await connection.CloseAsync();
-
-        return result is DBNull or null ? 0 : Convert.ToInt64(result);
+        return await _context.Invoices
+            .CountDocumentsAsync(Builders<Invoice>.Filter.Empty);
     }
 }

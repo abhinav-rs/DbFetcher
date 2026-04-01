@@ -2,17 +2,17 @@ namespace DbFetcher.DTOs;
 
 public class InvoiceDto
 {
-    public int Id { get; set; }
+    public string Id { get; set; } = string.Empty;
     public string InvoiceNumber { get; set; } = string.Empty;
     public string DistributorName { get; set; } = string.Empty;
     public string LocationId { get; set; } = string.Empty;
     public string LocationName { get; set; } = string.Empty;
-    public DateTime InvoiceDate { get; set; }
-    public DateTime ReceivedDate { get; set; }
-    public DateTime DueDate { get; set; }
-    public DateTime ApprovedDate { get; set; }
-    public DateTime ScheduledDate { get; set; }
-    public DateTime WithdrawDate { get; set; }
+    public DateTime? InvoiceDate { get; set; }
+    public DateTime? ReceivedDate { get; set; }
+    public DateTime? DueDate { get; set; }
+    public DateTime? ApprovedDate { get; set; }
+    public DateTime? ScheduledDate { get; set; }
+    public DateTime? WithdrawDate { get; set; }
     public DateTime? PaymentDate { get; set; }
     public DateTime? PaymentSentOnDate { get; set; }
     public decimal InvoiceAmount { get; set; }

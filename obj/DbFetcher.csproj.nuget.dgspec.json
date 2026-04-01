@@ -20,7 +20,8 @@
           "net10.0"
         ],
         "sources": {
-          "https://api.nuget.org/v3/index.json": {}
+          "https://api.nuget.org/v3/index.json": {},
+          "https://pkgs.dev.azure.com/FintechDevOps/_packaging/FintechNugets/nuget/v3/index.json": {}
         },
         "frameworks": {
           "net10.0": {
@@ -51,6 +52,10 @@
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[10.0.4, )"
+            },
+            "MongoDB.Driver": {
+              "target": "Package",
+              "version": "[3.7.1, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
